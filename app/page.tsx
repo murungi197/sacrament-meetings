@@ -1,69 +1,96 @@
 import Image from "next/image";
+import { Suspense } from "react";
+import Link from "next/link";
+import { connection } from "next/server";
+
+import MeetingCard from "@/components/MeetingCard";
+import { getCurrentMeeting } from "@/lib/meetings-db";
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+    <Suspense fallback={<main className="page-shell home-upcoming"><div className="skeleton skeleton-card" /></main>}>
+      <HomeContent />
+    </Suspense>
+  );
+}
+
+function formatDate(date: string): string {
+  return new Intl.DateTimeFormat("en-US", {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+  }).format(new Date(`${date}T12:00:00`));
+}
+
+async function HomeContent() {
+  await connection();
+  const currentMeeting = getCurrentMeeting();
+
+  return (
+    <main>
+      <section className="hero">
+        <div className="hero-inner">
+          <div className="hero-copy">
+            <span className="eyebrow hero-eyebrow">A place to worship and belong</span>
+            <h1>Come as you are.<br /><em>Worship together.</em></h1>
+            <p>
+              Find a moment of peace, a community of faith, and a place for
+              every member of your family.
+            </p>
+            <div className="hero-actions">
+              {currentMeeting ? (
+                <Link className="button button-light" href={`/meetings/${currentMeeting.id}`}>
+                  Most recent Sunday&apos;s meeting <span aria-hidden="true">↗</span>
+                </Link>
+              ) : (
+                <Link className="button button-light" href="/meetings">
+                  Browse meetings <span aria-hidden="true">↗</span>
+                </Link>
+              )}
+              <Link className="text-link hero-secondary" href="/meetings">
+                Browse all meetings <span aria-hidden="true">→</span>
+              </Link>
+            </div>
+          </div>
+          <div className="hero-art">
             <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
+              alt="Illustration of the sun above a chapel arch"
+              className="hero-art-image"
+              height={532}
+              priority
+              src="/sunday-arch.svg"
+              width={560}
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            <span className="hero-art-caption">SUNDAY · TOGETHER</span>
+          </div>
+          <div className="hero-index" aria-hidden="true">01 / 03</div>
         </div>
-      </main>
-    </div>
+      </section>
+      <section className="welcome-strip">
+        <div className="welcome-inner">
+          <span className="welcome-icon" aria-hidden="true">✳</span>
+          <p>There&apos;s a seat for you at <strong>Cedar Grove Ward.</strong></p>
+          {currentMeeting && (
+            <span className="welcome-date">{formatDate(currentMeeting.date)}</span>
+          )}
+        </div>
+      </section>
+      <section className="page-shell home-upcoming">
+        <div className="section-heading home-meetings-heading">
+          <div>
+            <span className="eyebrow">Your next gathering</span>
+            <h2>Sunday, together</h2>
+          </div>
+          <Link className="text-link" href="/meetings">
+            View all meetings <span aria-hidden="true">→</span>
+          </Link>
+        </div>
+        {currentMeeting ? (
+          <MeetingCard meeting={currentMeeting} featured />
+        ) : (
+          <p className="empty-state">No meeting is scheduled for this Sunday.</p>
+        )}
+      </section>
+    </main>
   );
 }
