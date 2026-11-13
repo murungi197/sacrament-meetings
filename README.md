@@ -1,5 +1,31 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## PostgreSQL meeting fixtures
+
+The PostgreSQL schema and sample meeting records are in `db/schema.sql` and
+`db/seed.sql`. Run the schema first, then the seed script, in a PostgreSQL
+database (for example, in the Neon SQL Editor). The seed can be run repeatedly;
+it updates records with matching dates rather than duplicating them.
+
+The seed includes eight dates across several meeting types. For example, find
+meetings featuring Sister Chen with:
+
+```sql
+SELECT date, meeting_type, speakers
+FROM meetings
+WHERE speakers @> '[{"name":"Sister Chen"}]'::jsonb
+ORDER BY date;
+```
+
+Paginate the seeded meetings with:
+
+```sql
+SELECT date, meeting_type
+FROM meetings
+ORDER BY date
+LIMIT 4 OFFSET 4;
+```
+
 ## Getting Started
 
 First, run the development server:
