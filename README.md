@@ -9,7 +9,7 @@ SQL Editor). The seed can be run repeatedly; it updates records with matching
 dates rather than duplicating them. The application reads meeting data from
 this database.
 
-The seed includes eight dates across several meeting types. For example, find
+The seed includes nine dates across several meeting types. For example, find
 meetings featuring Sister Chen with:
 
 ```sql
@@ -27,6 +27,9 @@ FROM meetings
 ORDER BY date
 LIMIT 4 OFFSET 4;
 ```
+
+The meetings list supports URL-based search and pagination, for example
+`/meetings?query=smith&page=1`.
 
 ## Getting Started
 

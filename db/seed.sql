@@ -9,7 +9,7 @@ INSERT INTO meetings (
   '{"number":134,"title":"I Believe in Christ"}'::JSONB, 'Sister Park',
   '[]'::JSONB, FALSE,
   '{"number":175,"title":"God, Our Father, Hear Us Pray"}'::JSONB,
-  '[{"name":"Sister Wallace","topic":"The Savior in our lives","type":"speaker"}]'::JSONB,
+  '[{"name":"Sister Wallace","topic":"The Savior in our lives","type":"speaker"},{"name":"Brother Nathan Smith","topic":"A testimony of Jesus Christ","type":"speaker"}]'::JSONB,
   '{"number":219,"title":"Because I Have Been Given Much"}'::JSONB, 'Brother Alvarez'
 ),
 (
@@ -74,6 +74,15 @@ INSERT INTO meetings (
   '{"number":169,"title":"In Remembrance of Thy Suffering"}'::JSONB,
   '[{"name":"Elder Rivera","topic":"Strengthening families through faith","type":"speaker"},{"name":"Sister Chen","topic":"Courage to follow the Savior","type":"speaker"}]'::JSONB,
   '{"number":85,"title":"How Firm a Foundation"}'::JSONB, 'Sister Mensah'
+),
+(
+  '2026-11-08', 'regular', 'Bishop Thompson', 'Sister Reed',
+  ARRAY['Ward service project sign-up is open'],
+  '{"number":2,"title":"The Spirit of God"}'::JSONB, 'Brother Alvarez',
+  '[{"description":"Ward conference follow-up"}]'::JSONB, FALSE,
+  '{"number":169,"title":"In Remembrance of Thy Suffering"}'::JSONB,
+  '[{"name":"Sister Brooks","topic":"Faith in Jesus Christ","type":"speaker"},{"name":"Brother Patel","topic":"Serving in the covenant path","type":"speaker"}]'::JSONB,
+  '{"number":301,"title":"I Am a Child of God"}'::JSONB, 'Sister Nakamura'
 )
 ON CONFLICT (date) DO UPDATE SET
   meeting_type = EXCLUDED.meeting_type,

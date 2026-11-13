@@ -4,6 +4,7 @@ import PrintButton from "@/components/PrintButton";
 import type { Hymn, SacramentMeeting } from "@/lib/types";
 
 interface MeetingDetailProps {
+  backHref: string;
   meeting: SacramentMeeting;
   printMode?: boolean;
 }
@@ -27,13 +28,14 @@ function HymnLine({ label, hymn }: { label: string; hymn: Hymn }) {
 }
 
 export default function MeetingDetail({
+  backHref,
   meeting,
   printMode = false,
 }: MeetingDetailProps) {
   return (
     <main className={`page-shell detail-shell flex flex-col${printMode ? " print-mode" : ""}`}>
       <div className="detail-topline">
-        <Link className="back-link" href="/meetings">
+        <Link className="back-link" href={backHref}>
           <span aria-hidden="true">←</span> All meetings
         </Link>
         {printMode ? (
