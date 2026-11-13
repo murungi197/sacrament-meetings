@@ -7,6 +7,6 @@ export const instant = false;
 
 export default async function CurrentMeetingPage() {
   await connection();
-  const meeting = getCurrentMeeting();
+  const meeting = await getCurrentMeeting();
   return redirect(meeting ? `/meetings/${meeting.id}` : "/meetings");
 }

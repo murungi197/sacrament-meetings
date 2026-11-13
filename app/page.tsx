@@ -24,7 +24,7 @@ function formatDate(date: string): string {
 
 async function HomeContent() {
   await connection();
-  const currentMeeting = getCurrentMeeting();
+  const currentMeeting = await getCurrentMeeting();
 
   return (
     <main>
