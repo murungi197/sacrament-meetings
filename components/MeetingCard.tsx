@@ -5,6 +5,8 @@ import type { SacramentMeeting } from "@/lib/types";
 interface MeetingCardProps {
   meeting: SacramentMeeting;
   featured?: boolean;
+  returnQuery?: string;
+  returnPage?: string;
 }
 
 function formatDate(date: string): { month: string; day: string; full: string } {
@@ -28,8 +30,15 @@ function formatMeetingType(type: SacramentMeeting["meetingType"]): string {
 export default function MeetingCard({
   meeting,
   featured = false,
+  returnQuery,
+  returnPage,
 }: MeetingCardProps) {
   const meetingDate = formatDate(meeting.date);
+  const returnParams = new URLSearchParams();
+  if (returnQuery) returnParams.set("query", returnQuery);
+  if (returnPage) returnParams.set("page", returnPage);
+  const returnQueryString = returnParams.toString();
+  const meetingHref = `/meetings/${meeting.id}${returnQueryString ? `?${returnQueryString}` : ""}`;
   const speakerCount = meeting.speakers.filter((item) => item.type === "speaker").length;
   const musicalNumberCount = meeting.speakers.filter(
     (item) => item.type === "musical-number",
@@ -58,7 +67,7 @@ export default function MeetingCard({
       </div>
       <Link
         className="card-link"
-        href={`/meetings/${meeting.id}`}
+        href={meetingHref}
         aria-label={`View meeting agenda for ${meetingDate.full}`}
       >
         <span aria-hidden="true">↗</span>

@@ -7,6 +7,7 @@ import MeetingDetail from "@/components/MeetingDetail";
 import type { SacramentMeeting } from "@/lib/types";
 
 interface MeetingDetailLoaderProps {
+  backHref: string;
   meetingId: string;
   printMode: boolean;
 }
@@ -18,6 +19,7 @@ type RequestState =
   | { status: "success"; meeting: SacramentMeeting };
 
 export default function MeetingDetailLoader({
+  backHref,
   meetingId,
   printMode,
 }: MeetingDetailLoaderProps) {
@@ -70,7 +72,7 @@ export default function MeetingDetailLoader({
         <span className="eyebrow">Cedar Grove Ward</span>
         <h1>We couldn&apos;t find that meeting.</h1>
         <p>The agenda may have moved or the link may be out of date.</p>
-        <Link className="button button-dark" href="/meetings">Browse meetings</Link>
+        <Link className="button button-dark" href={backHref}>Browse meetings</Link>
       </main>
     );
   }
@@ -83,5 +85,5 @@ export default function MeetingDetailLoader({
     );
   }
 
-  return <MeetingDetail meeting={state.meeting} printMode={printMode} />;
+  return <MeetingDetail backHref={backHref} meeting={state.meeting} printMode={printMode} />;
 }
