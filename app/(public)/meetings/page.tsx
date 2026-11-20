@@ -71,6 +71,7 @@ export default async function MeetingsPage(props: MeetingsPageProps) {
                 meeting={meeting}
                 returnQuery={query}
                 returnPage={pageParam}
+                manageActions
               />
             ))}
           </div>

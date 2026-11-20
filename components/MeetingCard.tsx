@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { deleteMeeting } from "@/lib/actions";
 import type { SacramentMeeting } from "@/lib/types";
 
 interface MeetingCardProps {
@@ -7,6 +8,7 @@ interface MeetingCardProps {
   featured?: boolean;
   returnQuery?: string;
   returnPage?: string;
+  manageActions?: boolean;
 }
 
 function formatDate(date: string): { month: string; day: string; full: string } {
@@ -32,6 +34,7 @@ export default function MeetingCard({
   featured = false,
   returnQuery,
   returnPage,
+  manageActions = false,
 }: MeetingCardProps) {
   const meetingDate = formatDate(meeting.date);
   const returnParams = new URLSearchParams();
@@ -72,6 +75,27 @@ export default function MeetingCard({
       >
         <span aria-hidden="true">↗</span>
       </Link>
+      {manageActions && (
+        <div className="flex items-center gap-3">
+          <Link
+            className="text-sm font-medium text-green-950 underline-offset-4 hover:underline"
+            href={`/meetings/${meeting.id}/edit`}
+            aria-label={`Edit meeting for ${meetingDate.full}`}
+          >
+            Edit
+          </Link>
+          <form action={deleteMeeting}>
+            <input type="hidden" name="id" value={meeting.id} />
+            <button
+              className="text-sm font-medium text-red-800 underline-offset-4 hover:underline"
+              type="submit"
+              aria-label={`Delete meeting for ${meetingDate.full}`}
+            >
+              Delete
+            </button>
+          </form>
+        </div>
+      )}
     </article>
   );
 }
