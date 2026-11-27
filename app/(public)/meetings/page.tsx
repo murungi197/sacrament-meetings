@@ -9,6 +9,7 @@ import { getMeetings, getMeetingsTotalPages } from "@/lib/meetings-db";
 
 export const metadata: Metadata = {
   title: "All meetings",
+  description: "Browse upcoming Sunday meetings and recent sacrament meeting agendas for Cedar Grove Ward.",
 };
 
 interface MeetingsPageProps {
