@@ -31,6 +31,46 @@ LIMIT 4 OFFSET 4;
 The meetings list supports URL-based search and pagination, for example
 `/meetings?query=smith&page=1`.
 
+## Administrator authentication
+
+The meeting-management pages use Auth.js Credentials authentication. Add these
+values to `.env.local` for local development and to the deployment environment:
+
+```env
+AUTH_SECRET=<generate-a-long-random-secret-with-npx-auth-secret>
+AUTH_TRUST_HOST=true
+ADMIN_EMAIL=leader@example.com
+ADMIN_PASSWORD_HASH=$2b$10$u27Vwfy9D73GG.S759jt/eWMoLTzg5XClHT7jYwJfD4IxuTAnkMDi
+NEXT_PUBLIC_SITE_URL=https://your-deployed-site.example
+```
+
+Generate the Auth.js secret with `npx auth secret`. Generate the bcrypt hash
+with Node.js (replace the example password with your own):
+
+```powershell
+node -e "require('bcryptjs').hash(process.argv[1], 12).then(console.log)" "your-secure-password"
+```
+
+Never commit `AUTH_SECRET`, the password hash, or a real password, and do not
+use a shared/default password. Visit `/login` to sign in; unauthenticated access
+to meeting management redirects there. The leadership navigation provides a
+sign-out button.
+
+For local development, also add this to `.env.local`:
+
+```env
+AUTH_TRUST_HOST=true
+```
+
+In production, enable trusted-host handling only when requests arrive through
+your hosting platform's trusted ingress. Set `NEXT_PUBLIC_SITE_URL` to the
+canonical deployment URL before building so generated social metadata uses
+absolute production URLs.
+
+The root layout defines the site title, description, and Open Graph defaults.
+`app/opengraph-image.tsx` generates a 1200×630 social preview image, and the
+meetings list has route-specific metadata.
+
 ## Getting Started
 
 First, run the development server:

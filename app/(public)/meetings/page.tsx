@@ -9,6 +9,7 @@ import { getMeetings, getMeetingsTotalPages } from "@/lib/meetings-db";
 
 export const metadata: Metadata = {
   title: "All meetings",
+  description: "Browse upcoming Sunday meetings and recent sacrament meeting agendas for Cedar Grove Ward.",
 };
 
 interface MeetingsPageProps {
@@ -71,6 +72,7 @@ export default async function MeetingsPage(props: MeetingsPageProps) {
                 meeting={meeting}
                 returnQuery={query}
                 returnPage={pageParam}
+                manageActions
               />
             ))}
           </div>

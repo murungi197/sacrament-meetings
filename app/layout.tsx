@@ -16,11 +16,19 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
   title: {
     default: "Cedar Grove Ward | Sunday Meetings",
     template: "%s | Cedar Grove Ward",
   },
   description: "Meeting times, agendas, and messages for the Cedar Grove Ward.",
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    siteName: "Cedar Grove Ward",
+    title: "Cedar Grove Ward | Sunday Meetings",
+    description: "Meeting times, agendas, and messages for the Cedar Grove Ward.",
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

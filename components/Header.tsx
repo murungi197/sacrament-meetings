@@ -22,6 +22,7 @@ export default async function Header() {
         </Link>
         <div className="header-right">
           <span className="today-label">{formattedDate}</span>
+          <Link className="text-link text-sm" href="/login">Leader sign in</Link>
         </div>
       </div>
     </header>
